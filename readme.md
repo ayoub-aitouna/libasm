@@ -31,9 +31,3 @@
 | 4th       | RCX      |
 | 5th       | R8       |
 | 6th       | R9       |
-
-# Notes
-- Parameters beyond the 6th are passed on the stack.
-- For the function `int ft_strcmp(char *s1, char *s2)`:
-  - `s1` (1st parameter) is passed in `RDI`.
-  - `s2` (2nd parameter) is passed in `RSI`.

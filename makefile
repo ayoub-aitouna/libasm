@@ -6,8 +6,9 @@ OBJ		:= $(patsubst %.s, $(OBJ_DIR)/%.o, $(SRC))
 TFT_SRC		:= $(wildcard tests/*.c)
 TFT_OBJ		:= $(patsubst %.c, $(OBJ_DIR)/%.o, $(TFT_SRC))
 
-NAME	:= program
+NAME	:=  libasm.a
 TFT_NAME	:= tester
+AR	:= ar crs
 
 
 $(OBJ_DIR)/%.o : %.s
@@ -20,10 +21,10 @@ $(OBJ_DIR)/%.o : %.c
 	@gcc -c $< -o $@
 
 $(NAME) : $(OBJ)
-	@ld $(OBJ) -o $(NAME)
+	$(AR) $(NAME) $(OBJ)
 
-check: $(TFT_OBJ) $(OBJ)
-	@gcc -o $(TFT_NAME) $(TFT_OBJ) $(OBJ)
+check: $(TFT_OBJ) $(NAME)
+	@gcc -o $(TFT_NAME) $(TFT_OBJ) $(NAME)
 	./$(TFT_NAME)
 clean :
 	rm $(OBJ)
