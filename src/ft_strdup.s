@@ -25,6 +25,6 @@ ft_strdup:
     
     ret ; return
 
-.EH
+.EH:
     mov rax, 0
     ret

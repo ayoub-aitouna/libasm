@@ -1,5 +1,6 @@
 #include "includes/ft_write.h"
 #include <errno.h>
+#include <unistd.h>
 
 void tft_write(int fd, char *s1, int len)
 {

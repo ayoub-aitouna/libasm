@@ -1,4 +1,4 @@
-SRC		:= $(wildcard src/*.s)
+SRC		:= $(wildcard src/*.s) $(wildcard src/bonus/*.s)
 OBJ_DIR	:= .compiled
 OBJ		:= $(patsubst %.s, $(OBJ_DIR)/%.o, $(SRC))
 
@@ -21,11 +21,19 @@ $(OBJ_DIR)/%.o : %.c
 	@gcc -c $< -o $@
 
 $(NAME) : $(OBJ)
-	$(AR) $(NAME) $(OBJ)
+	@$(AR) $(NAME) $(OBJ)
 
-check: $(TFT_OBJ) $(NAME)
+check:fclean $(TFT_OBJ) $(NAME)
 	@gcc -o $(TFT_NAME) $(TFT_OBJ) $(NAME)
 	./$(TFT_NAME)
+
+debug:
+	@gdb ./$(TFT_NAME)
+	set disassembly-flavor intel  
+	break ft_list_remove_if
+	run
+	info registers
+
 clean :
 	rm $(OBJ)
 

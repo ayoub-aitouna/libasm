@@ -8,7 +8,7 @@ ft_read:
     cmp rax, 0x0
     jl .EH
     ret
-.EH
+.EH:
     neg rax
     mov rdi, rax
     call __errno_location wrt ..plt 

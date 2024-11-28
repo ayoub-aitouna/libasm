@@ -2,7 +2,15 @@
 #include "includes/ft_strlen.h"
 #include "includes/ft_strcpy.h"
 #include "includes/ft_write.h"
+#include <stdlib.h>
 
+typedef struct s_list
+{
+    void *data;
+    struct s_list *next;
+} t_list;
+
+int ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)());
 char *ft_strdup(char *s);
 
 void testing_strcmp()
@@ -90,12 +98,33 @@ void testing_ft_strup()
         printf("FAIL\n");
 }
 
+// testing_strcmp();
+// testing_strlen();
+// testing_strcpy();
+// testing_write();
+// testing_ft_strup();
+
+t_list *lst_new(void *data)
+{
+    t_list *lst;
+
+    lst = (t_list *)malloc(sizeof(t_list));
+    lst->next = 0;
+    lst->data = data;
+    return (lst);
+}
+
+int cmp(int a, int b)
+{
+    printf("a: %d, b: %d\n", a, b);
+    return (1);
+}
+
 int main()
 {
-    testing_strcmp();
-    testing_strlen();
-    testing_strcpy();
-    testing_write();
-    testing_ft_strup();
+    t_list *lst;
+    lst = lst_new((void *)6996);
+    int a =ft_list_remove_if(&lst, (void *)5, &cmp);
+    printf("Looped %d times\n", a);
     return 0;
 }
