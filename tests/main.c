@@ -3,11 +3,10 @@
 #include "includes/ft_strcpy.h"
 #include "includes/ft_write.h"
 
-int ft_write(int fd, char *str, int len);
+char *ft_strdup(char *s);
 
-int main()
+void testing_strcmp()
 {
-
     printf("\n > TESTING FT_STRCMP ...... \n");
 
     tft_strcmp("testing00", "testng00");
@@ -24,7 +23,10 @@ int main()
     tft_strcmp("000000000000", "000000000000");
     tft_strcmp("000000000000", "000000000001");
     tft_strcmp("", "000000000001");
+}
 
+void testing_strlen()
+{
     printf("\n > TESTING FT_STRLEN ...... \n");
 
     tft_strlen("testing00");
@@ -41,7 +43,10 @@ int main()
     tft_strlen("000000000000000000000000");
     tft_strlen("000000000000                                                               000000000001");
     tft_strlen("\t\n                 000000000001");
+}
 
+void testing_strcpy()
+{
     printf("\n > TESTING FT_STRCPY ...... \n");
 
     tft_strcpy("testing00");
@@ -58,7 +63,10 @@ int main()
     tft_strcpy("000000000000000000000000");
     tft_strcpy("000000000000                                                               000000000001");
     tft_strcpy("\t\n                 000000000001");
+}
 
+void testing_write()
+{
     printf("\n > TESTING FT_WRITE ............. \n");
     tft_write(1, "Hello, World !\n", 15);
     tft_write(1, "Salut, le monde !\n", 18);
@@ -66,6 +74,28 @@ int main()
     tft_write(1, "Hallo, Welt !\n", 14);
     tft_write(-2, "Ciao, Mondo !\n", 14);
     tft_write(600, "Olá, Mundo !\n", 14);
+}
 
+void testing_ft_strup()
+{
+    printf("\n > TESTING FT_STRDUP ...... \n");
+
+    char s[] = "Hello, World !\n";
+    char *n = ft_strdup(s);
+    printf("Original: %s\n", s);
+    printf("Copy: %s\n", n);
+    if (n != s && strcmp(n, s) == 0)
+        printf("SUCCESS\n");
+    else
+        printf("FAIL\n");
+}
+
+int main()
+{
+    testing_strcmp();
+    testing_strlen();
+    testing_strcpy();
+    testing_write();
+    testing_ft_strup();
     return 0;
 }

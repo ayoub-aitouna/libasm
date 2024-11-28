@@ -30,6 +30,6 @@ clean :
 	rm $(OBJ)
 
 fclean :
-	rm -rf $(OBJ_DIR) $(NAME)
+	rm -rf $(OBJ_DIR) $(NAME) $(TFT_NAME)
 
 re : fclean $(NAME)
