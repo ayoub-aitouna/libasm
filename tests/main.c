@@ -114,17 +114,62 @@ t_list *lst_new(void *data)
     return (lst);
 }
 
-int cmp(int a, int b)
+int cmp(void *a, void *b)
 {
-    printf("a: %d, b: %d\n", a, b);
-    return (1);
+    printf("Checking ? %d == %d \n", (int)a , (int)b);
+
+    if ((int)a == (int)b)
+        return (0);
+    else
+        return (1);
+}
+void ft_printlist(t_list *lst)
+{
+    printf("\n--------------------\n");
+    while (lst)
+    {
+        printf("data : %d \n", lst->data);
+        lst = lst->next;
+    }
+    printf("--------------------\n\n");
+}
+
+void cft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)())
+{
+    t_list dummy;
+
+    t_list *prev = &dummy;
+    
+    t_list *current = *begin_list;
+
+    dummy.next = *begin_list;
+
+    while (current) {
+        if (cmp(current->data, data_ref) == 0) {
+            prev->next = current->next;
+            current = prev->next;
+        } else {
+            prev = current;
+            current = current->next;
+        }
+    }
+    *begin_list = dummy.next;
 }
 
 int main()
 {
     t_list *lst;
-    lst = lst_new((void *)6996);
-    int a =ft_list_remove_if(&lst, (void *)5, &cmp);
-    printf("Looped %d times\n", a);
+    lst = lst_new((void *)5);
+    lst->next = lst_new((void *)5);
+    lst->next->next = lst_new((void *)5);
+    lst->next->next->next = lst_new((void *)5);
+    lst->next->next->next->next = lst_new((void *)9);
+    lst->next->next->next->next->next = lst_new((void *)55);
+    lst->next->next->next->next->next->next = lst_new((void *)2);
+    lst->next->next->next->next->next->next->next = lst_new((void *)4);
+
+    ft_printlist(lst);
+    ft_list_remove_if(&lst, (void *)5, &cmp);
+    ft_printlist(lst);
     return 0;
 }

@@ -27,12 +27,13 @@ check:fclean $(TFT_OBJ) $(NAME)
 	@gcc -o $(TFT_NAME) $(TFT_OBJ) $(NAME)
 	./$(TFT_NAME)
 
-debug:
-	@gdb ./$(TFT_NAME)
-	set disassembly-flavor intel  
-	break ft_list_remove_if
-	run
-	info registers
+debug: fclean $(TFT_OBJ) $(NAME)
+	@gcc -o $(TFT_NAME) $(TFT_OBJ) $(NAME)
+	@gdb -ex "set disassembly-flavor intel" \
+		-ex "lay next"\
+	    -ex "break ft_list_remove_if.L2" \
+	    -ex "run"\
+	    ./$(TFT_NAME)
 
 clean :
 	rm $(OBJ)

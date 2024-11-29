@@ -3,107 +3,120 @@ section .text
     extern write
 
 
-;function void ft_list_remove_if(int (*cmp)())
-;params t_list **begin_list -> rdi, void *data_ref -> rsi, int (*cmp)() -> rdx
 ft_list_remove_if:
-    ; push rbp
-    sub rsp, 56
-    xor rax, rax
-    mov r9, 0x0
-    mov [rsp - 16], r9; i = 0
-    mov [rsp - 24], rdx
-    .LS:
-        mov rdi, [rsp - 16]
-        cmp rdi, 0x10 ; if(i == 16)
-        jz .FE
-
-        inc rdi
-        mov [rsp - 16], rdi; i++
-        mov byte [rsp], '2'
-        mov rdi, 0x1
-        mov rsi, rsp
-        mov rdx, 0x1
-        call [rsp - 24]
-        xor rax, rax
-        call write wrt ..plt
-        jmp .LS
-        
-    .FE:
-        mov rax, [rsp - 16]
-        add rsp, 56
-    
+        push    rbp
+        mov     rbp, rsp
+        sub     rsp, 64
+        mov     QWORD [rbp-40], rdi
+        mov     QWORD [rbp-48], rsi
+        mov     QWORD [rbp-56], rdx
+        lea     rax, [rbp-32]
+        mov     QWORD [rbp-8], rax
+        mov     rax, QWORD [rbp-40]
+        mov     rax, QWORD [rax]
+        mov     QWORD [rbp-16], rax
+        mov     rax, QWORD [rbp-40]
+        mov     rax, QWORD [rax]
+        mov     QWORD [rbp-24], rax
+        jmp     .L2
+.L4:
+        mov     rax, QWORD [rbp-16]
+        mov     rax, QWORD [rax]
+        mov     rdx, QWORD [rbp-48]
+        mov     rcx, QWORD [rbp-56]
+        mov     rsi, rdx
+        mov     rdi, rax
+        mov     eax, 0
+        call    rcx
+        test    eax, eax
+        jne     .L3
+        mov     rax, QWORD [rbp-16]
+        mov     rdx, QWORD [rax+8]
+        mov     rax, QWORD [rbp-8]
+        mov     QWORD [rax+8], rdx
+        mov     rax, QWORD [rbp-8]
+        mov     rax, QWORD [rax+8]
+        mov     QWORD [rbp-16], rax
+        jmp     .L2
+.L3:
+        mov     rax, QWORD [rbp-16]
+        mov     QWORD [rbp-8], rax
+        mov     rax, QWORD [rbp-16]
+        mov     rax, QWORD [rax+8]
+        mov     QWORD [rbp-16], rax
+.L2:
+        cmp     QWORD [rbp-16], 0
+        jne     .L4
+        mov     rdx, QWORD [rbp-24]
+        mov     rax, QWORD [rbp-40]
+        mov     QWORD [rax], rdx
+        nop
+        leave
         ret
 
 
-; section .text
-;     global ft_list_remove_if
 
-; ;function void ft_list_remove_if(int (*cmp)())
-; ;params t_list **begin_list -> rdi, void *data_ref -> rsi, int (*cmp)() -> rdx
 ; ft_list_remove_if:
-;     sub rsp, 56
+;     push        rbp
+;     mov         rbp, rsp
+;     sub         rsp, 96
+;     mov QWORD   [rbp-24], rdi
+;     mov         [rbp-32], rsi
+;     mov         [rbp-40], rdx
+;     lea         rax, [rbp-80]
+;     mov QWORD   [rbp-48], rax
     
-;     xor r11, r11 
-;     mov [rsp - 16], r11
-;     mov [rsp - 24], rdi
-;     mov [rsp - 32], rsi
-;     mov [rsp - 40], rdx 
-;     xor rax, rax
-;     mov [rsp - 48], rax
+;     mov         rax, [rbp-24]
+;     mov         rax, [rax]
+;     mov         [rbp-56], rax
+
+;     mov         [rbp-72], rax
+
+;     jmp         .L2
+
+; .L3:
+;     mov         rdx, [rbp-40]
+;     mov         rax, [rbp-56]
+;     mov         rdi, [rax]
+;     mov         rsi, [rbp-32]
     
+;     xor         rax, rax
+;     call        rdx
+;     test        rax, rax
+;     jz          .L4 
+;     jmp         .L6
+
+; .L2:
+;     cmp         dword   [rbp-56], 0
+;     jne         .L3
+
+;     mov         rax,  QWORD [rbp-80]
+;     mov         rax,  [rax + 8]
+
+;     mov         rbx,  QWORD [rbp-24]
+;     mov         [rbx], rax
     
-;     test rdi, rdi
-;     jz .FE
+;     xor         rax, rax
+;     leave
+;     ret
+    
+; .L4:
+;     mov         rax, qword [rbp-56]
+;     mov         rax, qword [rax+8]
 
+;     mov         rbx, qword [rbp-48]
+;     mov         qword [rbx+8], rax
+;     mov         rbx,  [rbx+8]
+;     mov         qword [rbp-56], rbx
 
-;     mov rdi, [rsp - 24]
-;     mov r9, [rdi] 
-;     test r9, r9
-;     jz .FE
+;     jmp .L2
 
+; .L6:
+;     mov         rax, qword [rbp-56]
+;     mov         qword [rbp-48],   rax
 
+;     mov         rax, qword [rbp-56]
+;     mov         rax, qword [rax+8]
+;     mov         qword [rbp-56], rax
 
-;     mov rdi, [rsp - 24]
-;     mov rdi, [rdi]
-;     mov [rsp - 16], rdi
-
-
-;     .LS:
-;         mov rdi, [rsp - 16]
-;         test rdi, rdi ; if(current == NULL)
-;         jz .FE
-        
-;         mov rdi, [rdi]
-;         mov rsi, [rsp - 32]
-;         call [rsp - 40]
-;         test rax, rax; if(cmp(current->data, data_ref) == 0)
-;         jnz .INC
-
-;         mov r10, [rsp - 48]
-;         test r10, r10
-;         jz .PZ
-
-;         jmp .INC
-;         .PZ:
-;             mov rdi, [rsp - 16];|\ 
-;             mov rdi, [rdi + 8]; |  > *begin_list = current->next
-;             mov [rsp - 24], rdi;|/
-;             jmp .INC
-        
-;         .INC:
-;             mov r11, [rsp - 16];|\
-;             mov [rsp - 48], r11;|  > previous = current
-
-;             mov rdi, [rsp - 16];|\ 
-;             mov rdi, [rdi + 8]; |  > current = current->next
-;             mov [rsp - 16], rdi;|/
-
-;             xor rax, rax
-;         jmp .LS
-        
-;     .FE:
-;         xor rax, rax
-;         add rsp, 56
-;         ret
-
-        
+;     jmp .L2
