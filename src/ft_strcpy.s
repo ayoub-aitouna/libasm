@@ -3,16 +3,20 @@ section .text
 
 ; params, dest -> rdi, src -> rsi
 ft_strcpy:
-    lea rax, [rdi]
-    LS:
-        mov bl, [rsi]
-        cmp bl, 0x0
-        je LE
-        mov [rdi], bl
-        inc rdi
-        inc rsi
-        jmp LS
-    LE:
-        mov bl, 0x0
-        mov [rdi], bl
-        ret
+    push    rbp
+    mov     rbp, rsp
+    lea     rax, [rdi]
+.L1:
+    mov     bl, [rsi]
+    cmp     bl, 0x0
+    je      .L2
+    mov     [rdi], bl
+    inc     rdi
+    inc     rsi
+    jmp     .L1
+.L2:
+    mov bl, 0x0
+    mov [rdi], bl
+    
+    leave
+    ret

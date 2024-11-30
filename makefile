@@ -1,13 +1,26 @@
-SRC		:= $(wildcard src/*.s) $(wildcard src/bonus/*.s)
+SRC		:= $(wildcard src/*.s)
+
+BSRC	:= $(wildcard src/*.s) $(wildcard src/bonus/*.s)
+
 OBJ_DIR	:= .compiled
+
 OBJ		:= $(patsubst %.s, $(OBJ_DIR)/%.o, $(SRC))
+BONUSOBJECT		:= $(patsubst %.s, $(OBJ_DIR)/%.o, $(BSRC))
 
 
-TFT_SRC		:= $(wildcard tests/*.c)
-TFT_OBJ		:= $(patsubst %.c, $(OBJ_DIR)/%.o, $(TFT_SRC))
+MTESTS_SRC		:= $(wildcard tests/*.c) $(wildcard tests/mendatory/*.c)
+MTESTS_OBJ		:= $(patsubst %.c, $(OBJ_DIR)/%.o, $(MTESTS_SRC))
+
+
+BTESTS_SRC		:= $(wildcard tests/*.c) $(wildcard tests/bonus/*.c)
+BTESTS_OBJ		:= $(patsubst %.c, $(OBJ_DIR)/%.o, $(BTESTS_SRC))
+
+
 
 NAME	:=  libasm.a
-TFT_NAME	:= tester
+BNAME	:=  libbonus.a
+MTEST_NAME	:= tester
+BTEST_NAME	:= bonus_tester
 AR	:= ar crs
 
 
@@ -20,25 +33,28 @@ $(OBJ_DIR)/%.o : %.c
 	@mkdir -p $(dir $@)
 	@gcc -c $< -o $@
 
+
 $(NAME) : $(OBJ)
 	@$(AR) $(NAME) $(OBJ)
 
-check:fclean $(TFT_OBJ) $(NAME)
-	@gcc -o $(TFT_NAME) $(TFT_OBJ) $(NAME)
-	./$(TFT_NAME)
+$(BNAME) : $(BONUSOBJECT)
+	@$(AR) $(BNAME) $(BONUSOBJECT)
 
-debug: fclean $(TFT_OBJ) $(NAME)
-	@gcc -o $(TFT_NAME) $(TFT_OBJ) $(NAME)
-	@gdb -ex "set disassembly-flavor intel" \
-		-ex "lay next"\
-	    -ex "break ft_list_remove_if.L2" \
-	    -ex "run"\
-	    ./$(TFT_NAME)
+
+bonus: $(BNAME) 
+
+check: $(MTESTS_OBJ) $(NAME)
+	@gcc -o $(MTEST_NAME) $(MTESTS_OBJ) -L. -lasm
+	@./$(MTEST_NAME)
+
+check_bonus: $(BTESTS_OBJ) $(BNAME)
+	@gcc -o $(MTEST_NAME) $(BTESTS_OBJ) -L. -lbonus
+	@./$(MTEST_NAME)
 
 clean :
-	rm $(OBJ)
+	rm -rf $(OBJ_DIR)
 
 fclean :
-	rm -rf $(OBJ_DIR) $(NAME) $(TFT_NAME)
+	rm -rf $(OBJ_DIR) $(NAME) $(BNAME) $(MTEST_NAME)
 
 re : fclean $(NAME)

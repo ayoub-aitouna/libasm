@@ -1,17 +1,10 @@
-#include "includes/ft_strcmp.h"
-#include "includes/ft_strlen.h"
-#include "includes/ft_strcpy.h"
-#include "includes/ft_write.h"
+#include "../includes/ft_strcmp.h"
+#include "../includes/ft_strlen.h"
+#include "../includes/ft_strcpy.h"
+#include "../includes/ft_write.h"
+#include "../includes/main.h"
 #include <stdlib.h>
 
-typedef struct s_list
-{
-    void *data;
-    struct s_list *next;
-} t_list;
-
-int ft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)());
-char *ft_strdup(char *s);
 
 void testing_strcmp()
 {
@@ -98,78 +91,13 @@ void testing_ft_strup()
         printf("FAIL\n");
 }
 
-// testing_strcmp();
-// testing_strlen();
-// testing_strcpy();
-// testing_write();
-// testing_ft_strup();
-
-t_list *lst_new(void *data)
-{
-    t_list *lst;
-
-    lst = (t_list *)malloc(sizeof(t_list));
-    lst->next = 0;
-    lst->data = data;
-    return (lst);
-}
-
-int cmp(void *a, void *b)
-{
-    printf("Checking ? %d == %d \n", (int)a , (int)b);
-
-    if ((int)a == (int)b)
-        return (0);
-    else
-        return (1);
-}
-void ft_printlist(t_list *lst)
-{
-    printf("\n--------------------\n");
-    while (lst)
-    {
-        printf("data : %d \n", lst->data);
-        lst = lst->next;
-    }
-    printf("--------------------\n\n");
-}
-
-void cft_list_remove_if(t_list **begin_list, void *data_ref, int (*cmp)())
-{
-    t_list dummy;
-
-    t_list *prev = &dummy;
-    
-    t_list *current = *begin_list;
-
-    dummy.next = *begin_list;
-
-    while (current) {
-        if (cmp(current->data, data_ref) == 0) {
-            prev->next = current->next;
-            current = prev->next;
-        } else {
-            prev = current;
-            current = current->next;
-        }
-    }
-    *begin_list = dummy.next;
-}
-
 int main()
 {
-    t_list *lst;
-    lst = lst_new((void *)5);
-    lst->next = lst_new((void *)5);
-    lst->next->next = lst_new((void *)5);
-    lst->next->next->next = lst_new((void *)5);
-    lst->next->next->next->next = lst_new((void *)9);
-    lst->next->next->next->next->next = lst_new((void *)55);
-    lst->next->next->next->next->next->next = lst_new((void *)2);
-    lst->next->next->next->next->next->next->next = lst_new((void *)4);
 
-    ft_printlist(lst);
-    ft_list_remove_if(&lst, (void *)5, &cmp);
-    ft_printlist(lst);
+    testing_strcmp();
+    testing_strlen();
+    testing_strcpy();
+    testing_write();
+    testing_ft_strup();
     return 0;
 }

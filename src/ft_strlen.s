@@ -5,16 +5,19 @@ section .text
 ; params, str -> rdi
 ; return, rax
 ft_strlen:
-    xor rax, rax
+    push    rbp
+    mov     rbp, rsp
+    xor     rax, rax
 
-    while_loop:        
-        lea rcx, [rdi]; rcx = str
-        mov bl, [rcx]; bl = str[i]
-        cmp bl, 0x0 ; if (_str[i] == 0)
-        je end_loop ; break
-        inc rax; i++
-        inc rdi; str++
-        jmp while_loop; continue
+while_loop:        
+    lea     rcx, [rdi]; rcx = str
+    mov     bl, [rcx]; bl = str[i]
+    cmp     bl, 0x0 ; if (_str[i] == 0)
+    je      end_loop ; break
+    inc     rax; i++
+    inc     rdi; str++
+    jmp     while_loop; continue
         
-    end_loop:
-        ret
+end_loop:
+    leave
+    ret
