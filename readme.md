@@ -23,6 +23,59 @@
 
 # x86-64 System V ABI Function Parameter Register Mapping
 
+### x86 Calling Conventions: A Comprehensive Guide
+
+- What is an ABI?: An Application Binary Interface (ABI) is a set of low-level specifications that define:
+ * How function calls are made
+ * How parameters are passed
+ * How return values are handled
+ * Register and stack usage
+ * Memory layout and data alignment
+
+The ABI ensures binary compatibility between different components of a software system, allowing compiled code from different sources to interoperate correctly.
+
+## 32-bit x86 Calling Conventions
+
+### cdecl (C Declaration) Calling Convention
+- **Primary use**: C programs on 32-bit x86 systems
+- **Parameter passing**: Right to left on the stack
+- **Caller responsibility**: Cleaning up the stack after function call
+- **Stack growth**: Downward (from high to low memory addresses)
+
+#### Parameter Passing Example:
+```c
+int function(int a, int b, int c);
+// Parameters pushed onto stack in reverse order:
+// [c] [b] [a] [return address]
+```
+
+### stdcall Calling Convention
+- **Primary use**: Windows API functions
+- **Parameter passing**: Right to left on the stack
+- **Callee responsibility**: Cleaning up the stack
+- **Naming convention**: Function names are decorated with `@` followed by the total bytes of parameters
+
+#### Memory Layout:
+```
+High Address
++-------------------+
+| Parameter 3       |
++-------------------+
+| Parameter 2       |
++-------------------+
+| Parameter 1       |
++-------------------+
+| Return Address    |
++-------------------+
+| Saved EBP         |
++-------------------+ <- ESP (Stack Pointer)
+Low Address
+```
+
+## 64-bit x86 Calling Conventions
+
+### System V AMD64 ABI (Linux, macOS, BSD)
+**Register-based Parameter Passing Order**:
 | Parameter | Register |
 |-----------|----------|
 | 1st       | RDI      |
@@ -31,6 +84,45 @@
 | 4th       | RCX      |
 | 5th       | R8       |
 | 6th       | R9       |
+
+- Floating-point parameters use XMM0-XMM7
+- Additional parameters passed on the stack
+- 128-byte "red zone" below the stack pointer for temporary data
+- Caller-saved registers: RAX, RCX, RDX, RSI, RDI, R8-R11
+- Callee-saved registers: RBX, RBP, R12-R15
+
+### Microsoft x64 Calling Convention (Windows)
+- First 4 integer/pointer arguments: RCX, RDX, R8, R9
+- Floating-point arguments: XMM0-XMM3
+- Shadow space of 32 bytes allocated by caller
+- Caller responsible for stack cleanup
+- Different register preservation rules compared to System V ABI
+
+## Key Differences Between 32-bit and 64-bit
+
+1. **Register Usage**
+   - 32-bit: Fewer general-purpose registers
+   - 64-bit: More registers available for parameter passing
+
+2. **Parameter Passing**
+   - 32-bit: Primarily stack-based
+   - 64-bit: Primarily register-based with fallback to stack
+
+3. **Memory Addressing**
+   - 32-bit: 4GB address space limit
+   - 64-bit: Significantly larger address space
+
+## Best Practices
+
+- Always consult the specific ABI for your target platform
+- Be aware of calling convention differences when writing low-level code
+- Use compiler-specific attributes or keywords to specify calling conventions
+- Consider performance implications of different calling methods
+
+## Recommended Reading
+- Intel x86 Programmer's Manual
+- System V ABI Documentation
+- Microsoft x64 Software Conventions
 
 
 ## Stack Alignment in x86-64 Architecture
